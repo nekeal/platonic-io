@@ -11,7 +11,6 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-pytest = {version = "^6.1.2", optional = true}
 click = "^7.1.2"
 
 [tool.poetry.dev-dependencies]
