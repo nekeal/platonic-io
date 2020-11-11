@@ -1,0 +1,11 @@
+site_name: Platonic Docs
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - About: contributing.md
+  - Changelog: changelog.md
+
+theme: readthedocs
+
+markdown_extensions:
+  - markdown_include.include
