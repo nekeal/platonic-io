@@ -30,7 +30,7 @@ tests = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six
 tests_no_zope = ["coverage (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
@@ -506,7 +506,7 @@ testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pyt
 test = ["pytest"]
 
 [metadata]
-content-hash = "aab8887d5b2ad568bad50471a0fbfbb69855b00b47f017ae04f163493eacdbe5"
+content-hash = "15c921292b5ac5ebea9351641311c5b5910a7430df73e0c682dfefec10fd94d3"
 lock-version = "1.0"
 python-versions = "^3.6"
 
