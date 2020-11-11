@@ -1,4 +1,4 @@
-#platonic
+# platonic
 
 ![image](https://img.shields.io/pypi/v/platonic.svg%0A%20%20%20%20%20:target:%20https://pypi.python.org/pypi/platonic)
 
@@ -11,22 +11,22 @@ Python package for text recognition of registration plates .
 -   Free software: MIT license
 -   Documentation: <https://platonic.readthedocs.io>. - currently unavailable
 
-##Features
+## Features
 
 -   TODO
 
-##Installation
+## Installation
 [Installation](docs/installation.md)
 
-##Contributing 
+## Contributing 
 [Contributing](contributing.md)
 
-##Authors
+## Authors
 
 Main authors of package:
 * Szymon Cader <szymon.sc.cader@gmail.com>
 * Patryk Kawa <kawapatryk99@gmail.com>
 * Bartosz Rudnicki <bartek@rudnicki.szczecin.pl>
 
-##Contributors
+## Contributors
 None yet. Why not be the first?
