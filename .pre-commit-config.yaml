@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-added-large-files
+
+  - repo: https://github.com/psf/black
+    rev: 20.8b1 # Replace by any tag/version: https://github.com/psf/black/tags
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.0.4
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/deployed/pre_ticket
+    rev: v1.0.0
+    hooks:
+      - id: pre_ticket
+        language_version: python3.9
+        stages: [commit-msg]
+        args: ['--regex=(?P<ticket>PLC-[0-9]+)']
