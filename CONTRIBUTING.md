@@ -65,7 +65,7 @@ development.
   a. Using poetry
 
     $ cd platonic/
-    $ poetry install
+    $ poetry install -E test
 Above command will create virtualenv for you and install all necessary packages
 
   b. Using pip and virtualenvwrapper
@@ -77,11 +77,11 @@ Above command will create virtualenv for you and install all necessary packages
         $ mkvirtualenv platonic
         $ cd platonic/
         $ pip install poetry
-        $ poetry install
+        $ poetry install -E
 
 After all run:
 
-    $ pre-commit install --install-hooks -t pre-commit -t commit-msg
+    $ poetry run pre-commit install --install-hooks -t pre-commit -t commit-msg
 
 This will configure git hooks which will run before each commit to ensure
 that code is consistent.
@@ -95,9 +95,9 @@ that code is consistent.
 5.  When you're done making changes, check that your changes pass flake8
     and the tests, including testing other Python versions with tox:
 
-        $ flake8 platonic tests
-        $ pytest
-        $ tox
+        $ poetry run flake8 platonic tests
+        $ poetry run pytest
+        $ poetry run tox
 
 6.  Commit your changes and push your branch to GitHub:
 
