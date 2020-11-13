@@ -63,13 +63,13 @@ development.
 
 3.
   a. Using poetry
-    
+
     $ cd platonic/
     $ poetry install
 Above command will create virtualenv for you and install all necessary packages
-  
+
   b. Using pip and virtualenvwrapper
-   
+
    Install your local copy into a virtualenv. Assuming you have
     virtualenvwrapper installed, this is how you set up your fork for
     local development:
@@ -78,6 +78,13 @@ Above command will create virtualenv for you and install all necessary packages
         $ cd platonic/
         $ pip install poetry
         $ poetry install
+
+After all run:
+
+    $ pre-commit install --install-hooks -t pre-commit -t commit-msg
+
+This will configure git hooks which will run before each commit to ensure
+that code is consistent.
 
 4.  Create a branch for local development:
 
@@ -120,7 +127,7 @@ Tips
 To run a subset of tests:
 
     $ pytest tests
-    
+
 Deploying
 ---------
 
@@ -128,10 +135,10 @@ A reminder for the maintainers on how to deploy. Make sure all your
 changes are committed (including an entry in CHANGELOG.md). Then run:
 
     $ poetry version [patch|patch|minor|major|prepatch|preminor|premajor|prerelease]
-Then change version in `platonic/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v" 
+Then change version in `platonic/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v"
 for example:
-    
-    $ git tag v1.0.0    
+
+    $ git tag v1.0.0
 
 The push tags to remote:
 

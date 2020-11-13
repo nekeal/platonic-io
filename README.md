@@ -18,7 +18,7 @@ Python package for text recognition of registration plates .
 ## Installation
 [Installation](docs/installation.md)
 
-## Contributing 
+## Contributing
 [Contributing](contributing.md)
 
 ## Authors
