@@ -27,6 +27,5 @@ repos:
     rev: v1.0.0
     hooks:
       - id: pre_ticket
-        language_version: python3.9
         stages: [commit-msg]
         args: ['--regex=(?P<ticket>PLC-[0-9]+)']
