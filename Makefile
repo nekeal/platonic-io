@@ -48,9 +48,6 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
-	poetry run flake8 platonic tests
-
 test: ## run tests quickly with the default Python
 	poetry run pytest
 
@@ -62,6 +59,11 @@ coverage: ## check code coverage quickly with the default Python
 	poetry run coverage report -m
 	poetry run coverage html
 	$(BROWSER) htmlcov/index.html
+
+quality: ## check quality of code
+	poetry run flake8 platonic tests
+	poetry run black --check platonic tests
+	poetry run isort --check platonic tests
 
 docs: ## generate mkdocs HTML documentation, including API docs
 	poetry run mkdocs build
