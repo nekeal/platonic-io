@@ -1,4 +1,4 @@
-# platonic-io
+# Platonic-io
 
 ![image](https://img.shields.io/pypi/v/platonic-io.svg%0A%20%20%20%20%20:target:%20https://pypi.python.org/pypi/platonic-io)
 ![Test](https://github.com/nekeal/platonic-io/workflows/Test/badge.svg?branch=PLC-1_setup_project&event=push)
