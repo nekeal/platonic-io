@@ -11,9 +11,7 @@ license = "MIT"
 
 [tool.isort]
 profile = "black"
-
-[tool.black]
-line-length = 88
+src_paths = "platonic"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
