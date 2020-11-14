@@ -1,14 +1,14 @@
-# platonic
+# platonic-io
 
-![image](https://img.shields.io/pypi/v/platonic.svg%0A%20%20%20%20%20:target:%20https://pypi.python.org/pypi/platonic)
-![Test](https://github.com/nekeal/platonic/workflows/Test/badge.svg?branch=PLC-1_setup_project&event=push)
-![Quality](https://github.com/nekeal/platonic/workflows/Quality/badge.svg?branch=PLC-1_setup_project)
-![image](https://readthedocs.org/projects/platonic/badge/?version=latest%0A%20%20%20%20%20:target:%20https://platonic.readthedocs.io/en/latest/?badge=latest%0A%20%20%20%20%20:alt:%20Documentation%20Status)
+![image](https://img.shields.io/pypi/v/platonic-io.svg%0A%20%20%20%20%20:target:%20https://pypi.python.org/pypi/platonic-io)
+![Test](https://github.com/nekeal/platonic-io/workflows/Test/badge.svg?branch=PLC-1_setup_project&event=push)
+![Quality](https://github.com/nekeal/platonic-io/workflows/Quality/badge.svg?branch=PLC-1_setup_project)
+![image](https://readthedocs.org/projects/platonic-io/badge/?version=latest%0A%20%20%20%20%20:target:%20https://platonic-io.readthedocs.io/en/latest/?badge=latest%0A%20%20%20%20%20:alt:%20Documentation%20Status)
 
 Python package for text recognition of registration plates .
 
 -   Free software: MIT license
--   Documentation: <https://platonic.readthedocs.io>. - currently unavailable
+-   Documentation: <https://platonic-io.readthedocs.io>. - currently unavailable
 
 ## Features
 

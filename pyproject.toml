@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "platonic"
+name = "platonic-io"
 version = "0.1.0"
 description = "Package for recognizing registration plates"
 authors = [
@@ -11,7 +11,7 @@ license = "MIT"
 
 [tool.isort]
 profile = "black"
-src_paths = "platonic"
+src_paths = "platonic-io"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
@@ -34,7 +34,7 @@ flake8 = "^3.8.4"
 
 
 [tool.poetry.scripts]
-platonic = 'platonic.cli:main'
+platonic-io = 'platonic-io.cli:main'
 
 [build-system]
 requires = ["poetry>=0.12"]

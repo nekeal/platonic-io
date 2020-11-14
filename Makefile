@@ -55,15 +55,15 @@ test-all: ## run tests on every Python version with tox
 	poetry run tox
 
 coverage: ## check code coverage quickly with the default Python
-	poetry run pytest --cov=platonic
+	poetry run pytest --cov=platonic-io
 	poetry run coverage report -m
 	poetry run coverage html
 	$(BROWSER) htmlcov/index.html
 
 quality: ## check quality of code
-	poetry run flake8 platonic tests
-	poetry run black --check platonic tests
-	poetry run isort --check platonic tests
+	poetry run flake8 platonic-io tests
+	poetry run black --check platonic-io tests
+	poetry run isort --check platonic-io tests
 
 docs: ## generate mkdocs HTML documentation, including API docs
 	poetry run mkdocs build

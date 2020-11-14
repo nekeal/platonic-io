@@ -11,7 +11,7 @@ Types of Contributions
 
 ### Report Bugs
 
-Report bugs at <https://github.com/nekeal/platonic/issues>.
+Report bugs at <https://github.com/nekeal/platonic-io/issues>.
 
 If you are reporting a bug, please include:
 
@@ -33,14 +33,14 @@ it.
 
 ### Write Documentation
 
-Platonic could always use more documentation, whether as part of the
-official platonic docs, in docstrings, or even on the web in blog posts,
+Platonic-io could always use more documentation, whether as part of the
+official platonic-io docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 ### Submit Feedback
 
 The best way to send feedback is to file an issue at
-<https://github.com/nekeal/platonic/issues>.
+<https://github.com/nekeal/platonic-io/issues>.
 
 If you are proposing a feature:
 
@@ -53,18 +53,18 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up platonic for local
+Ready to contribute? Here's how to set up platonic-io for local
 development.
 
-1.  Fork the platonic repo on GitHub.
+1.  Fork the platonic-io repo on GitHub.
 2.  Clone your fork locally:
 
-        $ git clone git@github.com:platonic/platonic.git
+        $ git clone git@github.com:platonic-io/platonic-io.git
 
 3.
   a. Using poetry
 
-    $ cd platonic/
+    $ cd platonic-io/
     $ poetry install -E test
 Above command will create virtualenv for you and install all necessary packages
 
@@ -74,8 +74,8 @@ Above command will create virtualenv for you and install all necessary packages
     virtualenvwrapper installed, this is how you set up your fork for
     local development:
 
-        $ mkvirtualenv platonic
-        $ cd platonic/
+        $ mkvirtualenv platonic-io
+        $ cd platonic-io/
         $ pip install poetry
         $ poetry install -E
 
@@ -95,7 +95,7 @@ that code is consistent.
 5.  When you're done making changes, check that your changes pass flake8
     and the tests, including testing other Python versions with tox:
 
-        $ poetry run flake8 platonic tests
+        $ poetry run flake8 platonic-io tests
         $ poetry run pytest
         $ poetry run tox
 
@@ -118,7 +118,7 @@ Before you submit a pull request, check that it meets these guidelines:
     the feature to the list in README.md.
 3.  The pull request should work for Python 3.6, 3.6, 3.7, 3.8 and 3.9 and
     for PyPy. Check
-    <https://travis-ci.com/nekeal/platonic/pull_requests> and make sure
+    <https://travis-ci.com/nekeal/platonic-io/pull_requests> and make sure
     that the tests pass for all supported Python versions.
 
 Tips
@@ -135,7 +135,7 @@ A reminder for the maintainers on how to deploy. Make sure all your
 changes are committed (including an entry in CHANGELOG.md). Then run:
 
     $ poetry version [patch|patch|minor|major|prepatch|preminor|premajor|prerelease]
-Then change version in `platonic/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v"
+Then change version in `platonic-io/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v"
 for example:
 
     $ git tag v1.0.0

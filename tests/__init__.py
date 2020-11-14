@@ -1,1 +1,1 @@
-"""Unit test package for platonic."""
+"""Unit test package for platonic-io."""

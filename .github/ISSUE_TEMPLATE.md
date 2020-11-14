@@ -1,4 +1,4 @@
-* platonic version:
+* platonic-io version:
 * Python version:
 * Operating System:
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Tests for `platonic` package."""
+"""Tests for `platonic-io` package."""
 
 
 def test_true():
