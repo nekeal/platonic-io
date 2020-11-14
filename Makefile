@@ -44,29 +44,30 @@ clean-pyc: ## remove Python file artifacts
 clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
 	rm -f .coverage
+	rm -f coverage.xml
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
 lint: ## check style with flake8
-	flake8 platonic tests
+	poetry run flake8 platonic tests
 
 test: ## run tests quickly with the default Python
-	pytest
+	poetry run pytest
 
 test-all: ## run tests on every Python version with tox
-	tox
+	poetry run tox
 
 coverage: ## check code coverage quickly with the default Python
-	pytest --cov=platonic
-	coverage report -m
-	coverage html
+	poetry run pytest --cov=platonic
+	poetry run coverage report -m
+	poetry run coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	mkdocs build
+docs: ## generate mkdocs HTML documentation, including API docs
+	poetry run mkdocs build
 
 servedocs: docs ## compile the docs watching for changes
-	mkdocs serve
+	poetry run mkdocs serve
 
 release: build ## package and upload a release
 	poetry publish
@@ -76,4 +77,4 @@ build: clean ## builds source and wheel package
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	poetry install
+	poetry install -E testq
