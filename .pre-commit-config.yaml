@@ -23,8 +23,8 @@ repos:
     hooks:
       - id: isort
 
-  - repo: https://github.com/deployed/pre_ticket
-    rev: v1.0.0
+  - repo: https://github.com/nekeal/pre_ticket
+    rev: fix_commit_when_empty_message
     hooks:
       - id: pre_ticket
         stages: [commit-msg]
