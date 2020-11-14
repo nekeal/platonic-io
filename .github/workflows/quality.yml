@@ -1,4 +1,4 @@
-name: Check quality of code for platonic
+name: Quality
 
 on: [push, pull_request]
 
