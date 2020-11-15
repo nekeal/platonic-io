@@ -135,7 +135,7 @@ A reminder for the maintainers on how to deploy. Make sure all your
 changes are committed (including an entry in CHANGELOG.md). Then run:
 
     $ poetry version [patch|patch|minor|major|prepatch|preminor|premajor|prerelease]
-Then change version in `platonic-io/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v"
+Then change version in `platonic_io/__init__.py` file and tag your latest commit with appropriate version prefixing it with "v"
 for example:
 
     $ git tag v1.0.0
@@ -144,4 +144,4 @@ The push tags to remote:
 
     $ git push --tags
 
-Travis will then deploy to PyPI if tests pass.
+Github actions will then deploy to PyPI if tests pass.
