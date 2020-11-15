@@ -77,7 +77,7 @@ Above command will create virtualenv for you and install all necessary packages
         $ mkvirtualenv platonic-io
         $ cd platonic-io/
         $ pip install poetry
-        $ poetry install -E
+        $ poetry install -E test
 
 After all run:
 
