@@ -53,38 +53,45 @@ If you are proposing a feature:
 Get Started!
 ------------
 
+!!! note
+    We use Poetry for development and we highly recommend you to install
+    it globally using official [instruction](https://python-poetry.org/docs/#installation)
+
 Ready to contribute? Here's how to set up platonic-io for local
 development.
 
 1.  Fork the platonic-io repo on GitHub.
 2.  Clone your fork locally:
 
-        $ git clone git@github.com:platonic-io/platonic-io.git
+        $ git clone git@github.com:<your_username>/platonic-io.git
 
-3.
-  a. Using poetry
+3. Install project for development
 
-    $ cd platonic-io/
-    $ poetry install -E test
-Above command will create virtualenv for you and install all necessary packages
+    - Using poetry
 
-  b. Using pip and virtualenvwrapper
+            $ cd platonic-io/
+            $ poetry install -E test
 
-   Install your local copy into a virtualenv. Assuming you have
-    virtualenvwrapper installed, this is how you set up your fork for
-    local development:
+        Above command will create virtualenv for you and install all necessary packages
 
-        $ mkvirtualenv platonic-io
-        $ cd platonic-io/
-        $ pip install poetry
-        $ poetry install -E test
+    - Using pip and virtualenvwrapper
 
-After all run:
+        Install your local copy into a virtualenv. Assuming you have
+        virtualenvwrapper installed, this is how you set up your fork for
+        local development:
 
-    $ poetry run pre-commit install --install-hooks -t pre-commit -t commit-msg
+            $ mkvirtualenv platonic-io
+            $ cd platonic-io/
+            $ pip install poetry
+            $ poetry install -E test
 
-This will configure git hooks which will run before each commit to ensure
-that code is consistent.
+        After that run:
+
+            $ poetry run pre-commit install --install-hooks -t pre-commit -t commit-msg
+
+        Above will configure git hooks which will run before each commit to ensure
+        that code is consistent.
+
 
 4.  Create a branch for local development:
 
@@ -118,7 +125,7 @@ Before you submit a pull request, check that it meets these guidelines:
     the feature to the list in README.md.
 3.  The pull request should work for Python 3.6, 3.6, 3.7, 3.8 and 3.9 and
     for PyPy. Check
-    <https://travis-ci.com/nekeal/platonic-io/pull_requests> and make sure
+    [Github actions](https://github.com/nekeal/platonic-io/actions?query=event%3Apull_request++) and make sure
     that the tests pass for all supported Python versions.
 
 Tips
@@ -126,7 +133,7 @@ Tips
 
 To run a subset of tests:
 
-    $ pytest tests
+    $ poetry run pytest tests
 
 Deploying
 ---------

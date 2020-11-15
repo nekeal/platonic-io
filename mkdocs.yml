@@ -2,10 +2,18 @@ site_name: Platonic-io Docs
 nav:
   - Home: index.md
   - Installation: installation.md
-  - About: contributing.md
+  - Contributing: contributing.md
   - Changelog: changelog.md
 
-theme: readthedocs
+theme:
+  name: readthedocs
+  highlightjs: false
+
+extra_css:
+  - css/friendly.css
 
 markdown_extensions:
   - markdown_include.include
+  - admonition
+  - codehilite:
+      guess_lang: true
