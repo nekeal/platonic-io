@@ -50,6 +50,17 @@ If you are proposing a feature:
 -   Remember that this is a volunteer-driven project, and that
     contributions are welcome :)
 
+Tools
+-----
+We use various tools for development to ensure quality of code and to make it
+more readable.
+
+* [Flake8](https://github.com/PyCQA/flake8) - Linter for python code
+* [Black](https://github.com/psf/black) - Code auto formatter
+* [Mypy](https://github.com/python/mypy) - Static type checker
+* [Isort](https://github.com/PyCQA/isort) - Tool for sorting imports
+* [pre-commmit](https://github.com/pre-commit/pre-commit) - Framework for managing git hooks
+
 Get Started!
 ------------
 
@@ -99,7 +110,7 @@ development.
 
     Now you can make your changes locally.
 
-5.  When you're done making changes, check that your changes pass flake8
+5.  When you're done making changes, check that your changes at least pass flake8
     and the tests, including testing other Python versions with tox:
 
         $ poetry run flake8 platonic-io tests

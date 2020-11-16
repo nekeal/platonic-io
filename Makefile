@@ -60,10 +60,15 @@ coverage: ## check code coverage quickly with the default Python
 	poetry run coverage html
 	$(BROWSER) htmlcov/index.html
 
-quality: ## check quality of code
+quality-check: ## check quality of code
 	poetry run flake8 platonic_io tests
 	poetry run black --check platonic_io tests
 	poetry run isort --check platonic_io tests
+	poetry run mypy platonic_io tests
+
+autoformatters: ## runs auto formatters
+	poetry run black platonic_io tests
+	poetry run isort platonic_io tests
 
 docs: ## generate mkdocs HTML documentation, including API docs
 	poetry run mkdocs build
