@@ -5,7 +5,7 @@ from cv2 import cv2 as cv2
 
 @pytest.fixture
 def plate_path():
-    return "tests/test_data/plate1"
+    return "tests/test_data/plate1.png"
 
 
 @pytest.fixture
