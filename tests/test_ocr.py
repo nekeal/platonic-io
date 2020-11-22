@@ -36,3 +36,8 @@ class TestLicencePlateOCRReader:
         )
 
         assert expected_config in plate_reader._get_config()
+
+    def test_string_method(self, cv_plate):
+        plate_reader = LicencePlateOCRReader(image=cv_plate)
+
+        assert "SZY 31113" in plate_reader.read_text()

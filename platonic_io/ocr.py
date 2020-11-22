@@ -18,10 +18,10 @@ class LicencePlateOCRReader:
         osm=3,
         extra_config="",
     ):
-        assert image or image_path, "Provide image or image path"
+        assert image is not None or image_path, "Provide image or image path"
         if image_path and not image_path.is_file():
             raise FileNotFoundError("Provided path does not exist or is directory")
-        self.image = image or cv2.imread(str(image_path))
+        self.image = image if image is not None else cv2.imread(str(image_path))
         self.psm = psm
         self.osm = osm
         self.extra_config = extra_config
@@ -32,5 +32,5 @@ class LicencePlateOCRReader:
             f"-c tessedit_char_whitelist={self.allowed_characters}"
         )
 
-    def read_text(self):
+    def read_text(self) -> str:
         return pytesseract.image_to_string(self.image, config=self._get_config())
