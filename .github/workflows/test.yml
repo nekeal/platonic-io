@@ -4,25 +4,27 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
-        platform: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: install tesseract
-        if: startsWith(matrix.os,'ubuntu')
+
+      - name: Install tesseract for windows
+        if: matrix.os == 'windows-latest'
+        run: choco install --yes --pre tesseract
+
+      - name: Install tesseract for linux
+        if: matrix.os == 'ubuntu-latest'
         run: sudo apt install tesseract-ocr
 
-      - name: Setup tmate session
-        if: startsWith(matrix.os,'windows')
-        uses: mxschmitt/action-tmate@v3
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
