@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from platonic_io.ocr import LicencePlateOCRReader
@@ -19,7 +20,7 @@ class TestLicencePlateOCRReader:
     @pytest.mark.parametrize(
         "arg_name,value,expected_config",
         (
-            ("osm", 1, "--osm 1"),
+            ("oem", 1, "--oem 1"),
             ("psm", 2, "--psm 2"),
             (
                 "extra_config",
@@ -41,3 +42,44 @@ class TestLicencePlateOCRReader:
         plate_reader = LicencePlateOCRReader(image=cv_plate)
 
         assert "SZY 31113" in plate_reader.read_text()
+
+    @pytest.mark.parametrize(
+        "first_part_length,is_valid1",
+        (
+            (3, True),
+            (2, True),
+            (1, False),
+            (4, False),
+        ),
+    )
+    @pytest.mark.parametrize(
+        "second_part_length,is_valid2",
+        (
+            (3, False),
+            (4, True),
+            (5, True),
+        ),
+    )
+    @pytest.mark.parametrize(
+        "separator,is_valid3",
+        (
+            (" ", True),
+            ("-", True),
+            ("_", False),
+        ),
+    )
+    def test_check_regex_match_method(
+        self,
+        first_part_length,
+        is_valid1,
+        second_part_length,
+        is_valid2,
+        separator,
+        is_valid3,
+    ):
+        plate_text = f"{'A' * first_part_length}{separator}{'B' * second_part_length}"
+        print(plate_text, all([is_valid1, is_valid2, is_valid3]))
+        lpor = LicencePlateOCRReader(np.ndarray([]))
+        assert lpor.check_regex_match(plate_text) is all(
+            [is_valid1, is_valid2, is_valid3]
+        )
