@@ -61,9 +61,9 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 quality-check: ## check quality of code
+	poetry run black platonic_io tests
+	poetry run isort platonic_io tests
 	poetry run flake8 platonic_io tests
-	poetry run black --check platonic_io tests
-	poetry run isort --check platonic_io tests
 	poetry run mypy platonic_io tests
 
 autoformatters: ## runs auto formatters
