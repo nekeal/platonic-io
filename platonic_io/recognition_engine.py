@@ -160,7 +160,7 @@ class Master(Thread):
                     plates_log.append([res[0], res[1]])
                     print("==========WROTE {} frame".format(res[0]))
                     last_saved_idx = res[0]
-                    self.progress = round((last_saved_idx / frames_in_file)*100, 1)
+                    self.progress = round((last_saved_idx / frames_in_file-1)*100, 1)
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
                 print("Reached end")
