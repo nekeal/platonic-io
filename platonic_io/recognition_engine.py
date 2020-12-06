@@ -95,7 +95,7 @@ class FrameWorker(Thread):
 
 
 class Master(Thread):
-    def __init__(self, input_path, output_path, progress_percentage, worker_count=1):
+    def __init__(self, input_path, output_path, worker_count=1):
         """
 
         :param input_path:
@@ -107,7 +107,8 @@ class Master(Thread):
         self.input_path = input_path
         self.output_path = output_path
         self.worker_count = worker_count
-        self.progress = progress_percentage
+        self.progress = 0
+        self.log = ""
 
     def run(self):
         movie = cv2.VideoCapture(self.input_path)
@@ -163,6 +164,10 @@ class Master(Thread):
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
                 print("Reached end")
+                for entry in plates_log:
+                    timestamp = (entry[0]/fps)
+                    valid_plates = [p for p in entry[1] if 4 <= len(p) < 9]
+                    self.log += str(timestamp) + "s: " + str(valid_plates) + "\n"
                 movie.release()
                 sink.release()
                 # for w in workers:
@@ -171,6 +176,11 @@ class Master(Thread):
                 break
 
 
+    def get_progress(self):
+        return self.progress
+
+    def get_log(self):
+        return self.log
 
 
 
