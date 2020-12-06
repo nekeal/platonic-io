@@ -104,3 +104,6 @@ ENV/
 # IDE settings
 .vscode/
 .idea/
+/tutek/
+/tutek/Plate_detect_and_recognize/Plate_examples/
+/tutek/Plate_detect_and_recognize/Plate_examples/
