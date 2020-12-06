@@ -12,7 +12,7 @@ Python package for text recognition of registration plates .
 
 ## Features
 
--   TODO
+- Reading text from single license plate.
 
 ## Installation
 [Installation](docs/installation.md)
