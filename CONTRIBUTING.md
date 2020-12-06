@@ -145,6 +145,10 @@ To run a subset of tests:
 
     $ poetry run pytest tests
 
+To run an application, remember to enter project venv by typing in project directory:
+
+    $ poetry shell
+
 Deploying
 ---------
 
