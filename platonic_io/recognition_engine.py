@@ -95,16 +95,25 @@ class FrameWorker(Thread):
 
 
 class Master(Thread):
-    def __init__(self, input_path, output_path, worker_count=1):
+    def __init__(self, input_path, output_path, progress_percentage, worker_count=1):
+        """
+
+        :param input_path:
+        :param output_path:
+        :param progress_percentage: passed variable to which an actual progrss state % will be written
+        :param worker_count:
+        """
         super().__init__()
         self.input_path = input_path
         self.output_path = output_path
         self.worker_count = worker_count
+        self.progress = progress_percentage
 
     def run(self):
         movie = cv2.VideoCapture(self.input_path)
         size = (int(movie.get(cv2.CAP_PROP_FRAME_WIDTH)), int(movie.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         fps = movie.get(cv2.CAP_PROP_FPS)
+        frames_in_file = movie.get(cv2.CAP_PROP_FRAME_COUNT)
         sink = cv2.VideoWriter(self.output_path, cv2.CAP_ANY, cv2.VideoWriter_fourcc(*'MJPG'), fps, size, params=None)
         plates_log = []
 
@@ -150,6 +159,7 @@ class Master(Thread):
                     plates_log.append([res[0], res[1]])
                     print("==========WROTE {} frame".format(res[0]))
                     last_saved_idx = res[0]
+                    self.progress = round((last_saved_idx / frames_in_file)*100, 1)
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
                 print("Reached end")
