@@ -97,7 +97,6 @@ class FrameWorker(Thread):
 class Master(Thread):
     def __init__(self, input_path, output_path, worker_count=1):
         """
-
         :param input_path:
         :param output_path:
         :param progress_percentage: passed variable to which an actual progrss state % will be written

@@ -1,7 +1,7 @@
 from platonic_io.recognition_engine import FrameWorker, Master
 from time import sleep
 
-master = Master("/home/bartek/Downloads/platonic_test_cut_cut.mp4", "/home/bartek/Downloads/3_out.avi", 3)
+master = Master("/home/bartek/Downloads/grupaA3.mp4", "/home/bartek/Downloads/a3_wtoh.avi", 3)
 master.start()
 
 while master.is_alive():
