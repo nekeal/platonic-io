@@ -1,9 +1,10 @@
 import os
+import subprocess
+import sys
 import threading
 import tkinter as tk
-from functools import partial
 from tkinter import Toplevel, filedialog
-from tkinter.ttk import *
+from tkinter.ttk import Progressbar
 
 # from PIL import Image, ImageTk
 import imageio
@@ -52,7 +53,7 @@ class GUI:
 
         self.progress.grid_forget()
 
-        self.buttons_frame.pack_propagate(0)
+        self.buttons_frame.pack_propagate(0)  # type: ignore
         self.buttons_frame.config(width=25, height=40)
         self.buttons_frame.grid(row=0, column=2, sticky="NESW", pady=10)
 
@@ -88,7 +89,7 @@ class GUI:
 
         self.labelframe.grid(row=0, column=1, pady=10)
         self.label.config(bg="grey71", height=40, width=130)
-        self.label.pack_propagate(0)
+        self.label.pack_propagate(0)  # type: ignore
         self.label.grid(row=0, column=1, sticky="NESW")
 
         plates_frame = tk.Frame(self.root, bg="grey")
@@ -102,7 +103,7 @@ class GUI:
         list_of_plates.pack(pady=10)
         recognized_plates = tk.Listbox(plates_frame, bg="grey")
         recognized_plates.config(width=25, height=15)
-        recognized_plates.pack_propagate(0)
+        recognized_plates.pack_propagate(0)  # type: ignore
         recognized_plates.pack()
 
         menu_button = tk.Button(
@@ -117,12 +118,12 @@ class GUI:
 
     def play_it(self, label):
 
-        for image in self.video.iter_data():
+        for image in self.video.iter_data():  # type: ignore
             frame_image = ImageTk.PhotoImage(
                 Image.fromarray(image), height=400, width=800
             )
             self.label.config(image=frame_image, width=920, height=600)
-            self.label.image = frame_image
+            self.label.image = frame_image  # type: ignore
 
     def upload_video(self):
         self.uploaded_file = filedialog.askopenfilename()
@@ -140,8 +141,14 @@ class GUI:
         self.download_video_button.config(state="normal")
 
     def play_uploaded_video(self):
-        if self.uploaded_file != "":
-            os.startfile(self.uploaded_file)
+        if self.uploaded_file != "" and sys.platform == "win32":
+            os.startfile(self.uploaded_file)  # type: ignore
+        elif sys.platform == "darwin" and self.uploaded_file != "":
+            opener = "open"
+            subprocess.call([opener, self.uploaded_file])
+        elif self.uploaded_file != "":
+            opener = "xdg-open"
+            subprocess.call([opener, self.uploaded_file])
         else:
             self.warning_window(
                 "No video uploaded", "No video uploaded! Upload one to play it"
@@ -149,7 +156,7 @@ class GUI:
 
     def inside_player(self):
         thread = threading.Thread(target=self.play_it, args=(self.label,))
-        thread.daemon = 1
+        thread.daemon = 1  # type: ignore
         thread.start()
 
     def download_report(self):
