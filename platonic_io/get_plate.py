@@ -24,10 +24,6 @@ def load_model(path):
         print(e)
 
 
-wpod_net_path = "models/wpod-net.json"
-wpod_net = load_model(wpod_net_path)
-
-
 def preprocess_image(image_path, resize=False):
     img = cv2.imread(image_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -84,6 +80,9 @@ loaded_model_json = json_file.read()
 json_file.close()
 model = model_from_json(loaded_model_json)
 model.load_weights("models/License_character_recognition_weight.h5")
+
+wpod_net_path = "models/wpod-net.json"
+wpod_net = load_model(wpod_net_path)
 print("[INFO] Model loaded successfully...")
 
 labels = LabelEncoder()
@@ -93,6 +92,7 @@ print("[INFO] Labels loaded successfully...")
 
 # Obtain plate image and its coordinates from an image
 test_image = "/home/bartek/Documents/V semestr/IO/platonic-io/tutek/Plate_detect_and_recognize/Plate_examples/szymon.png"
+print("START----")
 start = time.time()
 LpImg, cor = get_plate(test_image)
 print("CZAS={}".format(time.time()-start))
@@ -117,8 +117,12 @@ if (len(LpImg)):  # check if there is at least one license image
 
     plt.imshow(thre_mor, cmap="gray")
 
+    t2=time.time()
+    print("START2")
     cont, _ = cv2.findContours(thre_mor, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    print(cont)
+    print("TIME2={}".format(t2-time.time()))
+
+    #print(cont)
 
     # creat a copy version "test_roi" of plat_image to draw bounding box
     test_roi = plate_image.copy()

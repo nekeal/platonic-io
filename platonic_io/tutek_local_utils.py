@@ -1,4 +1,3 @@
-# pylint: disable=invalid-name, redefined-outer-name, missing-docstring, non-parent-init-called, trailing-whitespace, line-too-long
 import cv2
 import numpy as np
 
