@@ -5,11 +5,14 @@ import threading
 import tkinter as tk
 from tkinter import Toplevel, filedialog
 from tkinter.ttk import Progressbar
+from platonic_io.recognition_engine import FrameWorker, Master
 
 # from PIL import Image, ImageTk
 import imageio
 from PIL import Image, ImageTk
 
+# TODO liczba watkow w GUI
+# TODO percent meter
 
 class GUI:
     def __init__(self):
@@ -34,12 +37,12 @@ class GUI:
         self.label = tk.Label(self.labelframe)
         self.top = None
         self.topSettings = None
-        self.report = ""
-        self.video_location = ""
+        self.report = "~/Desktop/"
+        self.video_location = "../"
         self.uploaded_file = ""
         self.video = None
-        self.video_name = ""
-        self.raport_name = ""
+        self.video_name = "processed.mp4"
+        self.raport_name = "raport.mp4"
 
     def run(self):
         self.root.geometry("1400x1000")
@@ -135,7 +138,12 @@ class GUI:
             )
             self.uploaded_file = ""
 
+# os.path.join(self.video_location, self.video_name)
+
     def start_algorithm(self):
+        percent = 0
+        master = Master(self.uploaded_file, '/home/patryk-cybersec/Desktop/plx.mp4', percent, 2)
+        master.start()
         self.progress.grid(row=1, column=1, sticky="EW", pady=10)
         self.download_report_button.config(state="normal")
         self.download_video_button.config(state="normal")
