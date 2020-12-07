@@ -198,7 +198,6 @@ def reconstruct(image, image_resized, Yr, lp_threshold):
     final_labels = nms(labels, 0.1)
     final_labels_frontal = nms(labels_frontal, 0.1)
 
-    # print(final_labels_frontal)
     if not final_labels_frontal:
         return None, None, None, None
 
