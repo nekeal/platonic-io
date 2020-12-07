@@ -24,7 +24,7 @@ def load_model(path):
 
 def preprocess_image(image, resize=False):
     """
-    TODO: docs
+    scale from [0 255] to [0 1] and switch BGR to RGB
     """
     img = image
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -79,7 +79,7 @@ def get_width_height_ratio(cor):
 
 def sort_contours(contours, reverse=False):
     """
-    TODO: docs
+    sort given contours from left to right
     """
     key = 0
     bounding_boxes = [cv2.boundingRect(c) for c in contours]
