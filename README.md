@@ -1,9 +1,9 @@
 # Platonic-io
 
-![image](https://img.shields.io/pypi/v/platonic-io.svg%0A%20%20%20%20%20:target:%20https://pypi.python.org/pypi/platonic-io)
+[![PyPI version](https://badge.fury.io/py/platonic-io.svg)](https://badge.fury.io/py/platonic-io)
 ![Test](https://github.com/nekeal/platonic-io/workflows/Test/badge.svg?branch=PLC-1_setup_project&event=push)
 ![Quality](https://github.com/nekeal/platonic-io/workflows/Quality/badge.svg?branch=PLC-1_setup_project)
-![image](https://readthedocs.org/projects/platonic-io/badge/?version=latest%0A%20%20%20%20%20:target:%20https://platonic-io.readthedocs.io/en/latest/?badge=latest%0A%20%20%20%20%20:alt:%20Documentation%20Status)
+[![Documentation Status](https://readthedocs.org/projects/platonic-io/badge/?version=latest)](https://platonic-io.readthedocs.io/en/latest/?badge=latest)
 
 Python package for text recognition of registration plates .
 
