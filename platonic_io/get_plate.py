@@ -1,8 +1,13 @@
-from os.path import splitext
-from typing import Union
+import glob
+import time
+from os.path import basename, splitext
 
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
+from keras.models import model_from_json
+from matplotlib import gridspec
+from sklearn.preprocessing import LabelEncoder
 
 from .local_utils import detect_lp
 
@@ -60,22 +65,25 @@ def draw_box(image, coordinates, thickness=3):
     return vehicle_image
 
 
-def get_width_height_ratio(coordinates):
-    x_coordinates = coordinates[0]
-    y_coordinates = coordinates[1]
+def get_width_height_ratio(cor):
+    x_coordinates = cor[0]
+    y_coordinates = cor[1]
     # store the top-left, top-right, bottom-left, bottom-right
     # of the plate license respectively
     pts = []
     for i in range(4):
         pts.append([int(x_coordinates[i]), int(y_coordinates[i])])
     width = abs(pts[1][0] - pts[0][0])
-    height: Union[int, float] = abs(pts[0][1] - pts[2][1])
+    height = abs(pts[0][1] - pts[2][1])
     if height == 0:
         height = 0.001
     # width = sqrt((pts[1][0] - pts[0][0]) ** 2 + (pts[1][1] - pts[0][1]) ** 2)
     # height = sqrt((pts[0][0] - pts[2][0]) ** 2 + (pts[0][1] - pts[2][1]) ** 2)
     return width / height
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 def sort_contours(contours, reverse=False):
     """
@@ -88,11 +96,17 @@ def sort_contours(contours, reverse=False):
     )
     return contours
 
+def sort_contours(cnts, reverse=False):
+    i = 0
+    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
+    (cnts, boundingBoxes) = zip(
+        *sorted(zip(cnts, boundingBoxes), key=lambda b: b[1][i], reverse=reverse)
+    )
+    return cnts
 
+
+# pre-processing input images and pedict with model
 def predict_from_model(image, model, labels):
-    """
-    Function which preprocesses image and predicts with model
-    """
     image = cv2.resize(image, (80, 80))
     image = np.stack((image,) * 3, axis=-1)
     prediction = labels.inverse_transform(
