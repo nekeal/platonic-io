@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any, List
 
 import cv2
 import numpy as np
@@ -97,20 +98,20 @@ def IOU_labels(l1, l2):
     return IOU(l1.tl(), l1.br(), l2.tl(), l2.br())
 
 
-def nms(Labels, iou_threshold=0.5):
-    SelectedLabels = []
-    Labels.sort(key=lambda l: l.prob(), reverse=True)
+def nms(labels, iou_threshold=0.5):
+    selected_labels: List[Any] = []
+    labels.sort(key=lambda l: l.prob(), reverse=True)
 
-    for label in Labels:
+    for label in labels:
         non_overlap = True
-        for sel_label in SelectedLabels:
+        for sel_label in selected_labels:
             if IOU_labels(label, sel_label) > iou_threshold:
                 non_overlap = False
                 break
 
         if non_overlap:
-            SelectedLabels.append(label)
-    return SelectedLabels
+            selected_labels.append(label)
+    return selected_labels
 
 
 def find_T_matrix(pts, t_pts):

@@ -135,8 +135,8 @@ class Master(Thread):
         )
         plates_log = []
 
-        tasks = Queue()
-        results = Queue()
+        tasks: Queue = Queue()
+        results: Queue = Queue()
         workers = []
 
         for i in range(self.worker_count):

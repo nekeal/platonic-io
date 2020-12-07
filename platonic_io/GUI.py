@@ -185,7 +185,7 @@ class GUI:
             self.video_name = video_location.get()
         if report.get() != "":
             self.raport_name = report.get()
-        self.topSettings.destroy()
+        self.topSettings.destroy()  # type: ignore
 
     def settings_window(self):
         self.topSettings = Toplevel()

@@ -1,4 +1,5 @@
 from os.path import splitext
+from typing import Union
 
 import cv2
 import numpy as np
@@ -45,15 +46,15 @@ def get_plate(image_path, wpod_net, d_max=608, d_min=256):
 def draw_box(image, coordinates, thickness=3):
     vehicle_image = image
     for c in coordinates:
-        pts = []
+        pts_list = []
         x_coordinates = c[0]
         y_coordinates = c[1]
         # store the top-left, top-right, bottom-left, bottom-right
         # of the plate license respectively
         for i in range(4):
-            pts.append([int(x_coordinates[i]), int(y_coordinates[i])])
+            pts_list.append([int(x_coordinates[i]), int(y_coordinates[i])])
 
-        pts = np.array(pts, np.int32)
+        pts: np.array = np.array(pts_list, np.int32)
         pts = pts.reshape((-1, 1, 2))
         cv2.polylines(vehicle_image, [pts], True, (0, 255, 0), thickness)
     return vehicle_image
@@ -68,7 +69,7 @@ def get_width_height_ratio(cor):
     for i in range(4):
         pts.append([int(x_coordinates[i]), int(y_coordinates[i])])
     width = abs(pts[1][0] - pts[0][0])
-    height = abs(pts[0][1] - pts[2][1])
+    height: Union[int, float] = abs(pts[0][1] - pts[2][1])
     if height == 0:
         height = 0.001
     # width = sqrt((pts[1][0] - pts[0][0]) ** 2 + (pts[1][1] - pts[0][1]) ** 2)
