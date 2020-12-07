@@ -6,7 +6,6 @@ import tkinter as tk
 from tkinter import Toplevel, filedialog
 from tkinter.ttk import Progressbar
 
-# from PIL import Image, ImageTk
 import imageio
 from PIL import Image, ImageTk
 

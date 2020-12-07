@@ -1,17 +1,15 @@
-# from multiprocessing import Process, Queue
-from queue import Queue
+from multiprocessing import Queue
+from pathlib import Path
 from threading import Thread
 from time import sleep
-import matplotlib.pyplot as plt
-from matplotlib import gridspec
-from .ocr import LicencePlateOCRReader
 
 import cv2
-from keras.models import model_from_json
-from sklearn.preprocessing import LabelEncoder
-from .get_plate import load_model, preprocess_image, get_plate, draw_box, sort_contours, predict_from_model, \
-    get_width_height_ratio
 import numpy as np
+from sklearn.preprocessing import LabelEncoder
+
+from .get_plate import draw_box, get_plate, get_width_height_ratio, load_model
+from .local_utils import get_model_filepath
+from .ocr import LicencePlateOCRReader
 
 
 class FrameWorker(Thread):
@@ -21,39 +19,42 @@ class FrameWorker(Thread):
         self.result_queue = result_queue
 
     def run(self):
+        from keras.models import model_from_json  # long running import
 
         # Load Models
         # Load model architecture, weight and labels
-        json_file = open('models/MobileNets_character_recognition.json', 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
+        loaded_model_json = get_model_filepath(
+            "MobileNets_character_recognition.json"
+        ).read_text()
         model = model_from_json(loaded_model_json)
-        model.load_weights("models/License_character_recognition_weight.h5")
-        wpod_net_path = "models/wpod-net.json"
+        model.load_weights(
+            str(get_model_filepath("License_character_recognition_weight.h5"))
+        )
+        wpod_net_path = str(get_model_filepath("wpod-net.json"))
         wpod_net = load_model(wpod_net_path)
 
         labels = LabelEncoder()
-        labels.classes_ = np.load('models/license_character_classes.npy')
+        labels.classes_ = np.load(get_model_filepath("license_character_classes.npy"))
 
         while True:
             frame_idx, frame = self.task_queue.get()
             if frame is None:
                 break
-            LpImg, cor = get_plate(frame, wpod_net)
+            lp_img, cor = get_plate(frame, wpod_net)
 
-            if LpImg and (len(LpImg)):  # check if there is at least one license image
+            if lp_img and (len(lp_img)):  # check if there is at least one license image
                 plates_strings = []
                 positive_cor = []
                 for curr_cor in cor:
                     ratio = get_width_height_ratio(curr_cor)
                     if 2 <= ratio < 8:
                         positive_cor.append(curr_cor)
-                for idx, plate_img in enumerate(LpImg):
+                for idx, plate_img in enumerate(lp_img):
                     # Scales, calculates absolute values, and converts the result to 8-bit.
                     plate_image = cv2.convertScaleAbs(plate_img, alpha=(255.0))
                     # convert to grayscale and blur the image
-                    gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
-                    blur = cv2.GaussianBlur(gray, (7, 7), 0)
+                    # gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
+                    # blur = cv2.GaussianBlur(gray, (7, 7), 0)
 
                     reader = LicencePlateOCRReader(plate_image)
                     plates_strings.append(reader.read_text())
@@ -87,7 +88,6 @@ class FrameWorker(Thread):
                     #             _, curr_num = cv2.threshold(curr_num, 220, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
                     #             crop_characters.append(curr_num)
 
-
                     # final_string = ''
                     # for i, character in enumerate(crop_characters):
                     #     title = np.array2string(predict_from_model(character, model, labels))
@@ -110,6 +110,7 @@ class Master(Thread):
         :param worker_count:
         """
         super().__init__()
+        assert Path(input_path).is_file(), "Source video does not exist"
         self.input_path = input_path
         self.output_path = output_path
         self.worker_count = worker_count
@@ -118,10 +119,20 @@ class Master(Thread):
 
     def run(self):
         movie = cv2.VideoCapture(self.input_path)
-        size = (int(movie.get(cv2.CAP_PROP_FRAME_WIDTH)), int(movie.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        size = (
+            int(movie.get(cv2.CAP_PROP_FRAME_WIDTH)),
+            int(movie.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+        )
         fps = movie.get(cv2.CAP_PROP_FPS)
         frames_in_file = movie.get(cv2.CAP_PROP_FRAME_COUNT)
-        sink = cv2.VideoWriter(self.output_path, cv2.CAP_ANY, cv2.VideoWriter_fourcc(*'MJPG'), fps, size, params=None)
+        sink = cv2.VideoWriter(
+            self.output_path,
+            cv2.CAP_ANY,
+            cv2.VideoWriter_fourcc(*"MJPG"),
+            fps,
+            size,
+            params=None,
+        )
         plates_log = []
 
         tasks = Queue()
@@ -165,13 +176,15 @@ class Master(Thread):
                     plates_log.append([res[0], res[1]])
                     print("==========WROTE {} frame".format(res[0]))
                     last_saved_idx = res[0]
-                    self.progress = round((last_saved_idx / (frames_in_file - 1)) * 100, 1)
+                    self.progress = round(
+                        (last_saved_idx / (frames_in_file - 1)) * 100, 1
+                    )
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
                 self.progress = 100
                 print("Reached end")
                 for entry in plates_log:
-                    timestamp = (entry[0] / fps)
+                    timestamp = entry[0] / fps
                     valid_plates = [p for p in entry[1] if 4 <= len(p) < 9]
                     self.log += str(timestamp) + "s: " + str(valid_plates) + "\n"
                 movie.release()
