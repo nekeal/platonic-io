@@ -6,7 +6,7 @@ Prerequisites:
 ==============
 
 Before the installation make sure that following modules were installed:
-    
+
 * Python3 <br>
 ``` sudo apt-get install python3 ```
 * libhdf5-dev <br>
@@ -14,6 +14,9 @@ Before the installation make sure that following modules were installed:
 * tesseract-ocr <br>
 ``` sudo apt-get install tesseract-ocr ```
 
+If you compiled your python from source make sure that you had
+`tk-dev` package installed. Otherwise you need to install it and reinstall
+your python.
 
 Stable release
 ==============
