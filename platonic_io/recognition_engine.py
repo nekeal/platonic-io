@@ -50,9 +50,9 @@ class FrameWorker(Thread):
                     if 2 <= ratio < 8:
                         positive_cor.append(curr_cor)
                 for idx, plate_img in enumerate(lp_img):
-                    # Scales, calculates absolute values, and converts the result to 8-bit.
+                    #  Scales, calculates absolute values,
+                    #  and converts the result to 8-bit.
                     plate_image = cv2.convertScaleAbs(plate_img, alpha=(255.0))
-
 
                     reader = LicencePlateOCRReader(plate_image)
                     plates_strings.append(reader.read_text())
@@ -69,7 +69,6 @@ class Master(Thread):
         """
         :param input_path:
         :param output_path:
-        :param progress_percentage: passed variable to which an actual progrss state % will be written
         :param worker_count:
         """
         super().__init__()
