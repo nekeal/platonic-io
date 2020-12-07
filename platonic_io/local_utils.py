@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import cv2
 import numpy as np
 
@@ -142,7 +144,7 @@ def normal(pts, side, mn, MN):
 
 
 # Reconstruction function from predict value into plate crpoped from image
-def reconstruct(I, Iresized, Yr, lp_threshold):
+def reconstruct(image, image_resized, Yr, lp_threshold):
     # 4 max-pooling layers, stride = 2
     net_stride = 2 ** 4
     side = ((208 + 40) / 2) / net_stride
@@ -156,12 +158,12 @@ def reconstruct(I, Iresized, Yr, lp_threshold):
 
     xx, yy = np.where(Probs > lp_threshold)
     # CNN input image size
-    WH = getWH(Iresized.shape)
+    WH = getWH(image_resized.shape)
     # output feature map size
     MN = WH / net_stride
 
     vxx = vyy = 0.5  # alpha
-    base = lambda vx, vy: np.matrix(
+    base = lambda vx, vy: np.matrix(  # noqa: E731
         [[-vx, -vy, 1], [vx, -vy, 1], [vx, vy, 1], [-vx, vy, 1]]
     ).T
     labels = []
@@ -213,24 +215,29 @@ def reconstruct(I, Iresized, Yr, lp_threshold):
         for _, label in enumerate(final_labels):
             t_ptsh = getRectPts(0, 0, out_size[0], out_size[1])
             ptsh = np.concatenate(
-                (label.pts * getWH(I.shape).reshape((2, 1)), np.ones((1, 4)))
+                (label.pts * getWH(image.shape).reshape((2, 1)), np.ones((1, 4)))
             )
             H = find_T_matrix(ptsh, t_ptsh)
-            Ilp = cv2.warpPerspective(I, H, out_size, borderValue=0)
+            Ilp = cv2.warpPerspective(image, H, out_size, borderValue=0)
             TLp.append(Ilp)
             Cor.append(ptsh)
     return final_labels, TLp, lp_type, Cor
 
 
-def detect_lp(model, I, max_dim, lp_threshold):
-    min_dim_img = min(I.shape[:2])
+def detect_lp(model, image, max_dim, lp_threshold):
+    min_dim_img = min(image.shape[:2])
     factor = float(max_dim) / min_dim_img
-    w, h = (np.array(I.shape[1::-1], dtype=float) * factor).astype(int).tolist()
-    Iresized = cv2.resize(I, (w, h))
-    T = Iresized.copy()
-    T = T.reshape((1, T.shape[0], T.shape[1], T.shape[2]))
-    Yr = model.predict(T)
-    Yr = np.squeeze(Yr)
-    # print(Yr.shape)
-    L, TLp, lp_type, Cor = reconstruct(I, Iresized, Yr, lp_threshold)
+    w, h = (np.array(image.shape[1::-1], dtype=float) * factor).astype(int).tolist()
+    image_resized = cv2.resize(image, (w, h))
+    image_copy = image_resized.copy()
+    image_copy = image_copy.reshape(
+        (1, image_copy.shape[0], image_copy.shape[1], image_copy.shape[2])
+    )
+    yr = model.predict(image_copy)
+    yr = np.squeeze(yr)
+    L, TLp, lp_type, Cor = reconstruct(image, image_resized, yr, lp_threshold)
     return L, TLp, lp_type, Cor
+
+
+def get_model_filepath(name: str):
+    return Path(__file__).parent.joinpath("models", name)
