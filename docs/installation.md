@@ -2,6 +2,19 @@
 title: Installation
 ---
 
+Prerequisites:
+==============
+
+Before the installation make sure that following modules were installed:
+    
+* Python3 <br>
+``` sudo apt-get install python3 ```
+* libhdf5-dev <br>
+``` sudo apt-get install libhdf5-dev ```
+* tesseract-ocr <br>
+``` sudo apt-get install tesseract-ocr ```
+
+
 Stable release
 ==============
 
@@ -40,3 +53,10 @@ Once you have a copy of the source, you can install it with:
 If you don't have poetry installed:
 
     $ pip install .
+
+Running project
+===============
+
+To run the project, run those commands in your terminal:
+
+    $ platonic-io gui
