@@ -1,7 +1,10 @@
-from platonic_io.recognition_engine import FrameWorker, Master
 from time import sleep
 
-master = Master("/home/bartek/Downloads/grupaA3.mp4", "/home/bartek/Downloads/a3_other.avi", 3)
+from platonic_io.recognition_engine import FrameWorker, Master
+
+master = Master(
+    "/home/bartek/Downloads/grupaA3.mp4", "/home/bartek/Downloads/a3_other.avi", 3
+)
 master.start()
 
 while master.is_alive():

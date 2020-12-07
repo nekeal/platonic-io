@@ -2,49 +2,36 @@ import os
 import subprocess
 import sys
 import threading
+import time
 import tkinter as tk
+from pathlib import Path
 from tkinter import Toplevel, filedialog
 from tkinter.ttk import Progressbar
 
-# from PIL import Image, ImageTk
 import imageio
 from PIL import Image, ImageTk
 
 from platonic_io.recognition_engine import Master
 
-# TODO liczba watkow w GUI
-# TODO percent meter
 
 
 class GUI:
-    def __init__(self):
+    def __init__(self, thread=4):
         self.root = tk.Tk()
         self.progress = Progressbar(self.root, orient="horizontal")
         self.buttons_frame = tk.Frame(self.root, bg="grey")
-        self.download_report_button = tk.Button(
-            self.buttons_frame,
-            text="download report",
-            state="disabled",
-            command=self.download_report,
-            width=32,
-        )
-        self.download_video_button = tk.Button(
-            self.buttons_frame,
-            text="download video",
-            state="disabled",
-            command=self.download_video,
-            width=32,
-        )
         self.labelframe = tk.LabelFrame(self.root, bg="grey", height=35, width=130)
         self.label = tk.Label(self.labelframe)
         self.top = None
         self.topSettings = None
-        self.report = "~/Desktop/"
+        self.report = "../"
         self.video_location = "../"
         self.uploaded_file = ""
         self.video = None
         self.video_name = "processed.mp4"
-        self.raport_name = "raport.mp4"
+        self.raport_name = "raport.txt"
+        self.progress_percent = 0
+        self.thread = thread
 
     def run(self):
         self.root.geometry("1400x1000")
@@ -71,53 +58,38 @@ class GUI:
         upload_file_button.grid(row=0, column=0, pady=10, padx=10)
 
         start_algorithm_button = tk.Button(
-            self.buttons_frame, text="start it", command=self.start_algorithm, width=32
+            self.buttons_frame,
+            text="start algorithm",
+            command=self.start_algorithm,
+            width=32,
         )
         start_algorithm_button.grid(row=2, column=0, pady=10, padx=10)
 
         play_uploaded_video_button = tk.Button(
             self.buttons_frame,
-            text="play video",
+            text="outside player",
             command=self.play_uploaded_video,
             width=32,
         )
         play_uploaded_video_button.grid(row=4, column=0, pady=10, padx=10)
 
-        self.download_report_button.grid(row=6, column=0, pady=10, padx=10)
-
-        self.download_video_button.grid(row=8, column=0, pady=10, padx=10)
-
         inside_player = tk.Button(
-            self.buttons_frame, text="player", command=self.inside_player, width=32
+            self.buttons_frame,
+            text="inbuild player",
+            command=self.inside_player,
+            width=32,
         )
-        inside_player.grid(row=10, column=0, pady=10, padx=10)
+        inside_player.grid(row=6, column=0, pady=10, padx=10)
 
         self.labelframe.grid(row=0, column=1, pady=10)
         self.label.config(bg="grey71", height=40, width=130)
         self.label.pack_propagate(0)  # type: ignore
         self.label.grid(row=0, column=1, sticky="NESW")
 
-        plates_frame = tk.Frame(self.root, bg="grey")
-        plates_frame.grid(row=0, column=0, sticky="NEW", pady=10, padx=10)
-        list_of_plates = tk.Label(
-            plates_frame,
-            text="List of recognized plates",
-            bg="grey",
-            font="Verdana 10 bold",
-        )
-        list_of_plates.pack(pady=10)
-        recognized_plates = tk.Listbox(plates_frame, bg="grey")
-        recognized_plates.config(width=25, height=15)
-        recognized_plates.pack_propagate(0)  # type: ignore
-        recognized_plates.pack()
-
         menu_button = tk.Button(
             self.root, text="settings", width=32, command=self.settings_window
         )
         menu_button.grid(row=1, column=2)
-
-        for x in range(50):
-            recognized_plates.insert("end", str(x))
 
         self.root.mainloop()
 
@@ -140,17 +112,26 @@ class GUI:
             )
             self.uploaded_file = ""
 
-    # os.path.join(self.video_location, self.video_name)
-
     def start_algorithm(self):
-        percent = 0
+        self.progress.grid(row=1, column=1, sticky="EW", pady=10)
         master = Master(
-            self.uploaded_file, "/home/patryk-cybersec/Desktop/plx.mp4", percent, 2
+            self.uploaded_file,
+            os.path.join(self.video_location, self.video_name),
+            self.thread,
         )
         master.start()
-        self.progress.grid(row=1, column=1, sticky="EW", pady=10)
-        self.download_report_button.config(state="normal")
-        self.download_video_button.config(state="normal")
+        time.sleep(15)
+        self.progress_percent = master.get_progress()
+        self.refresh_progress(master)
+        Path(os.path.join(self.report, self.raport_name)).write_text(
+            str(master.get_log())
+        )
+
+    def refresh_progress(self, master):
+        while master.is_alive():
+            self.progress["value"] = self.progress_percent
+            self.root.update_idletasks()
+            self.progress_percent = master.get_progress()
 
     def play_uploaded_video(self):
         if self.uploaded_file != "" and sys.platform == "win32":
@@ -170,12 +151,6 @@ class GUI:
         thread = threading.Thread(target=self.play_it, args=(self.label,))
         thread.daemon = 1  # type: ignore
         thread.start()
-
-    def download_report(self):
-        print("download report")
-
-    def download_video(self):
-        print("download video")
 
     def warning_window(self, warning_title, warning_message):
         self.top = Toplevel()
@@ -199,22 +174,22 @@ class GUI:
 
     def choose_raport_location(self):
         self.report = filedialog.askdirectory()
-        self.settings_window()
 
     def choose_video_location(self):
         self.video_location = filedialog.askdirectory()
-        self.settings_window()
 
     def exit_settings(self, top, video_location, report):
-        self.video_name = video_location.get()
-        self.raport_name = report.get()
-        top.destroy()
+        if video_location.get() != "":
+            self.video_name = video_location.get()
+        if report.get() != "":
+            self.raport_name = report.get()
+        self.topSettings.destroy()
 
     def settings_window(self):
         self.topSettings = Toplevel()
         self.topSettings.resizable(0, 0)
         self.topSettings.title("settings")
-        self.topSettings.geometry("450x300")
+        self.topSettings.geometry("500x300")
         self.topSettings.config(bg="grey")
         report_label = tk.Label(
             self.topSettings,
@@ -268,7 +243,7 @@ class GUI:
         where_video_input.grid(row=4, column=1, padx=10)
         exit_button = tk.Button(
             self.topSettings,
-            text="exit",
+            text="save",
             command=lambda: self.exit_settings(
                 self.topSettings, where_video_input, where_report_input
             ),
