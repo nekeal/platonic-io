@@ -1,7 +1,13 @@
 # CHANGELOG
 
-## 0.2.0.dev (2020-xx-xx)
+## 0.2.0.dev (2020-12-07)
 
+### Added
+- Graphical User Interface [#7](https://github.com/nekeal/platonic-io/pull/7)
+- Plate recognition engine [#8](https://github.com/nekeal/platonic-io/pull/8)
+- Documentation [#8](https://github.com/nekeal/platonic-io/pull/8)
+- Requirements [#8](https://github.com/nekeal/platonic-io/pull/8)
+- Additional CLI [#8](https://github.com/nekeal/platonic-io/pull/8)
 
 
 ## 0.1.0 (2020-12-01)
