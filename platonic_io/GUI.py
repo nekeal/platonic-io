@@ -33,7 +33,7 @@ class GUI:
         self.uploaded_file = ""
         self.video = None
         self.video_name = "processed_video.mp4"
-        self.report_name = "processed_raport.txt"
+        self.report_name = "processed_report.txt"
         self.progress_percent = 0
         self.thread = thread
 

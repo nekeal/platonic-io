@@ -72,8 +72,6 @@ def get_width_height_ratio(cor):
     height: Union[int, float] = abs(pts[0][1] - pts[2][1])
     if height == 0:
         height = 0.001
-    # width = sqrt((pts[1][0] - pts[0][0]) ** 2 + (pts[1][1] - pts[0][1]) ** 2)
-    # height = sqrt((pts[0][0] - pts[2][0]) ** 2 + (pts[0][1] - pts[2][1]) ** 2)
     return width / height
 
 
