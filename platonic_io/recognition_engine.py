@@ -52,47 +52,10 @@ class FrameWorker(Thread):
                 for idx, plate_img in enumerate(lp_img):
                     # Scales, calculates absolute values, and converts the result to 8-bit.
                     plate_image = cv2.convertScaleAbs(plate_img, alpha=(255.0))
-                    # convert to grayscale and blur the image
-                    # gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
-                    # blur = cv2.GaussianBlur(gray, (7, 7), 0)
+
 
                     reader = LicencePlateOCRReader(plate_image)
                     plates_strings.append(reader.read_text())
-
-                    # # Applied inversed thresh_binary
-                    # binary = cv2.threshold(blur, 180, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-                    # ## Applied dilation
-                    # kernel3 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-                    # thre_mor = cv2.morphologyEx(binary, cv2.MORPH_DILATE, kernel3)
-                    #
-                    # # creat a copy version "test_roi" of plat_image to draw bounding box
-                    # test_roi = plate_image.copy()
-                    # # contours
-                    # cont, _ = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-                    # crop_characters = []
-                    #
-                    # # define standard width and height of character
-                    # digit_w, digit_h = 30, 60
-                    #
-                    # for c in sort_contours(cont):
-                    #     (x, y, w, h) = cv2.boundingRect(c)
-                    #     ratio = h / w
-                    #     if 1 <= ratio <= 3.5:  # Only select contour with defined ratio
-                    #         if h / plate_image.shape[0] >= 0.3:  # Select contour which has the height larger than 50% of the plate
-                    #             # Draw bounding box arroung digit number
-                    #             cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                    #
-                    #             # Sperate number and gibe prediction
-                    #             curr_num = thre_mor[y:y + h, x:x + w]
-                    #             curr_num = cv2.resize(curr_num, dsize=(digit_w, digit_h))
-                    #             _, curr_num = cv2.threshold(curr_num, 220, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-                    #             crop_characters.append(curr_num)
-
-                    # final_string = ''
-                    # for i, character in enumerate(crop_characters):
-                    #     title = np.array2string(predict_from_model(character, model, labels))
-                    #     final_string += title.strip("'[]")
-                    # plates_strings.append(final_string)
 
                 plate_frame = draw_box(frame, positive_cor)
                 self.result_queue.put((frame_idx, plates_strings, plate_frame))
