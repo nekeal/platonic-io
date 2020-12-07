@@ -1,4 +1,4 @@
-#from multiprocessing import Process, Queue
+# from multiprocessing import Process, Queue
 from queue import Queue
 from threading import Thread
 from time import sleep
@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import cv2
 from keras.models import model_from_json
 from sklearn.preprocessing import LabelEncoder
-from .get_plate import load_model, preprocess_image, get_plate, draw_box, sort_contours, predict_from_model, get_width_height_ratio
+from .get_plate import load_model, preprocess_image, get_plate, draw_box, sort_contours, predict_from_model, \
+    get_width_height_ratio
 import numpy as np
 
 
@@ -36,14 +37,14 @@ class FrameWorker(Thread):
             frame_idx, frame = self.task_queue.get()
             if frame is None:
                 break
-            LpImg, cor = get_plate(frame,wpod_net)
+            LpImg, cor = get_plate(frame, wpod_net)
 
             if LpImg and (len(LpImg)):  # check if there is at least one license image
                 plates_strings = []
                 positive_cor = []
                 for curr_cor in cor:
                     ratio = get_width_height_ratio(curr_cor)
-                    if ratio >= 2 and ratio < 8:
+                    if 2 <= ratio < 8:
                         positive_cor.append(curr_cor)
                 for idx, plate_img in enumerate(LpImg):
                     # Scales, calculates absolute values, and converts the result to 8-bit.
@@ -71,7 +72,8 @@ class FrameWorker(Thread):
                         (x, y, w, h) = cv2.boundingRect(c)
                         ratio = h / w
                         if 1 <= ratio <= 3.5:  # Only select contour with defined ratio
-                            if h / plate_image.shape[0] >= 0.3:  # Select contour which has the height larger than 50% of the plate
+                            if h / plate_image.shape[
+                                0] >= 0.3:  # Select contour which has the height larger than 50% of the plate
                                 # Draw bounding box arroung digit number
                                 cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
@@ -126,7 +128,6 @@ class Master(Thread):
             workers.append(worker)
             worker.start()
 
-
         no_more_frames = False
         frame_idx = 0
         last_saved_idx = -1
@@ -135,14 +136,14 @@ class Master(Thread):
             ret, frame = movie.read()
             # no more frames
             if ret:
-                while tasks.qsize() >= 4*self.worker_count:
+                while tasks.qsize() >= 4 * self.worker_count:
                     sleep(0.01)
                 tasks.put((frame_idx, frame))
                 frame_idx += 1
             else:
                 no_more_frames = True
 
-            #Flush frames to dst file
+            # Flush frames to dst file
             if not results.empty():
                 tmp_res = []
                 for _ in range(results.qsize()):
@@ -159,32 +160,24 @@ class Master(Thread):
                     plates_log.append([res[0], res[1]])
                     print("==========WROTE {} frame".format(res[0]))
                     last_saved_idx = res[0]
-                    self.progress = round((last_saved_idx / (frames_in_file-1))*100, 1)
+                    self.progress = round((last_saved_idx / (frames_in_file - 1)) * 100, 1)
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
+                self.progress = round((last_saved_idx / (frames_in_file - 1)) * 100, 1)
                 print("Reached end")
                 for entry in plates_log:
-                    timestamp = (entry[0]/fps)
+                    timestamp = (entry[0] / fps)
                     valid_plates = [p for p in entry[1] if 4 <= len(p) < 9]
                     self.log += str(timestamp) + "s: " + str(valid_plates) + "\n"
                 movie.release()
                 sink.release()
                 for w in workers:
-                    tasks.put(None)
+                    tasks.put((None, None))
                 print(plates_log)
                 break
-
 
     def get_progress(self):
         return self.progress
 
     def get_log(self):
         return self.log
-
-
-
-
-
-
-
-
