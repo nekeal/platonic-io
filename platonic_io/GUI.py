@@ -28,7 +28,7 @@ class GUI:
         self.video_location = "../"
         self.uploaded_file = ""
         self.video = None
-        self.video_name = "processed.mp4"
+        self.video_name = "processed_video.mp4"
         self.raport_name = "raport.txt"
         self.progress_percent = 0
         self.thread = thread
