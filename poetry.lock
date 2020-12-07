@@ -391,6 +391,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "openalpr"
+version = "1.1.0"
+description = "OpenALPR Python Bindings"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "opencv-python"
 version = "4.4.0.46"
 description = "Wrapper package for OpenCV python bindings."
@@ -685,7 +693,7 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.1"
-content-hash = "f3f8588934e8b0dc4717faa24484bee27812a4ce832f316003e8f415aa53c640"
+content-hash = "d91ec25da02805ca530d658da442d2b4d1c11edb78bc4ebe7bc3dcc60dbe8a1d"
 
 [metadata.files]
 appdirs = [
@@ -928,6 +936,10 @@ numpy = [
     {file = "numpy-1.19.4-cp39-cp39-win_amd64.whl", hash = "sha256:4377e10b874e653fe96985c05feed2225c912e328c8a26541f7fc600fb9c637b"},
     {file = "numpy-1.19.4-pp36-pypy36_pp73-manylinux2010_x86_64.whl", hash = "sha256:2a2740aa9733d2e5b2dfb33639d98a64c3b0f24765fed86b0fd2aec07f6a0a08"},
     {file = "numpy-1.19.4.zip", hash = "sha256:141ec3a3300ab89c7f2b0775289954d193cc8edb621ea05f99db9cb181530512"},
+]
+openalpr = [
+    {file = "openalpr-1.1.0-py3-none-any.whl", hash = "sha256:66a9a79929f436e7e06fba28e15c9bed136c74dceda345eb5d89d19692dc9340"},
+    {file = "openalpr-1.1.0.tar.gz", hash = "sha256:36f929e184e17f983ee51fbe250f3f7d50332d67df59a50dbca2331a1315d84a"},
 ]
 opencv-python = [
     {file = "opencv-python-4.4.0.46.tar.gz", hash = "sha256:d80db278a07f51811dbf0f9c31ff7cd5b2501822fb7a7587e71f9ff27d5c04bd"},
