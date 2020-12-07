@@ -13,7 +13,8 @@ from PIL import Image, ImageTk
 
 from platonic_io.recognition_engine import Master
 
-
+# class GUI is responsible for opening and handling
+# graphical interface of an application
 
 class GUI:
     def __init__(self, thread=4):
