@@ -2,6 +2,12 @@
 
 ## 0.3.0.dev (UNRELEASED)
 
+## 0.2.1 (2020-12-07)
+
+### Changed
+- Updated project metadata in pyproject.toml
+
+
 ## 0.2.0 (2020-12-07)
 
 ### Added
