@@ -169,8 +169,8 @@ class Master(Thread):
                     self.log += str(timestamp) + "s: " + str(valid_plates) + "\n"
                 movie.release()
                 sink.release()
-                # for w in workers:
-                #     w.kill()
+                for w in workers:
+                    tasks.put(None)
                 print(plates_log)
                 break
 
