@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## 0.2.0.dev (2020-12-07)
+## 0.3.0.dev (UNRELEASED)
+
+## 0.2.0 (2020-12-07)
 
 ### Added
 - Graphical User Interface [#7](https://github.com/nekeal/platonic-io/pull/7)

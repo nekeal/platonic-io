@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "platonic-io"
-version = "0.1.0"
+version = "0.2.0"
 description = "Package for recognizing registration plates"
 authors = [
     "Szymon Cader <szymon.sc.cader@gmail.com>",

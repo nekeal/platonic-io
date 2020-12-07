@@ -13,6 +13,9 @@ Python package for text recognition of registration plates .
 ## Features
 
 - Reading text from single license plate.
+- Graphical user interface
+- License plates detection
+- Generating video with marked license plates
 
 ## Installation
 [Installation](docs/installation.md)
