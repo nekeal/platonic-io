@@ -1,13 +1,7 @@
-import glob
-import time
-from os.path import basename, splitext
+from os.path import splitext
 
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
-from keras.models import model_from_json
-from matplotlib import gridspec
-from sklearn.preprocessing import LabelEncoder
 
 from .local_utils import detect_lp
 
@@ -80,10 +74,7 @@ def get_width_height_ratio(cor):
     # width = sqrt((pts[1][0] - pts[0][0]) ** 2 + (pts[1][1] - pts[0][1]) ** 2)
     # height = sqrt((pts[0][0] - pts[2][0]) ** 2 + (pts[0][1] - pts[2][1]) ** 2)
     return width / height
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
 def sort_contours(contours, reverse=False):
     """
@@ -95,14 +86,6 @@ def sort_contours(contours, reverse=False):
         *sorted(zip(contours, bounding_boxes), key=lambda b: b[1][key], reverse=reverse)
     )
     return contours
-
-def sort_contours(cnts, reverse=False):
-    i = 0
-    boundingBoxes = [cv2.boundingRect(c) for c in cnts]
-    (cnts, boundingBoxes) = zip(
-        *sorted(zip(cnts, boundingBoxes), key=lambda b: b[1][i], reverse=reverse)
-    )
-    return cnts
 
 
 # pre-processing input images and pedict with model
