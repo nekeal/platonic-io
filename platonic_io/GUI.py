@@ -13,11 +13,13 @@ from PIL import Image, ImageTk
 
 from platonic_io.recognition_engine import Master
 
-# class GUI is responsible for opening and handling
-# graphical interface of an application
-
 
 class GUI:
+    """
+    Is responsible for opening and handling
+    graphical interface of an application
+    """
+
     def __init__(self, thread=4):
         self.root = tk.Tk()
         self.progress = Progressbar(self.root, orient="horizontal")
@@ -256,5 +258,6 @@ class GUI:
         exit_button.place(x=100, y=250, relwidth=0.6, relheight=0.1)
 
 
-siema = GUI()
-siema.run()
+if __name__ == "__main__":
+    gui = GUI()
+    gui.run()
