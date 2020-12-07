@@ -26,6 +26,7 @@ opencv-python = "^4.4.0"
 numpy = "^1.19.4"
 pytesseract = "^0.3.6"
 openalpr = "^1.1.0"
+matplotlib = "^3.3.3"
 
 [tool.poetry.extras]
 test = ["pytest", "pytest-cov"]
