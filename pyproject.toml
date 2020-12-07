@@ -1,6 +1,16 @@
 [tool.poetry]
 name = "platonic-io"
-version = "0.2.0"
+version = "0.2.1"
+readme = "README.md"
+repository = "https://github.com/nekeal/platonic-io/tree/minor_corrections"
+documentation = "https://platonic-io.readthedocs.io/en/stable/"
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
 description = "Package for recognizing registration plates"
 authors = [
     "Szymon Cader <szymon.sc.cader@gmail.com>",
