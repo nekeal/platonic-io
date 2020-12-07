@@ -4,6 +4,7 @@ from pathlib import Path
 
 import click
 
+from platonic_io.GUI import GUI
 from platonic_io.ocr import LicencePlateOCRReader
 from platonic_io.recognition_engine import Master
 
@@ -37,6 +38,12 @@ def process_video(input_video, output_path, threads=1):
         if overwrite:
             Path(output_path).unlink()
     Master(str(input_video), str(output_path), threads).start()
+
+
+@main.command()
+@click.option("-t", "--threads", default=1, type=int)
+def gui(threads):
+    GUI(threads).run()
 
 
 if __name__ == "__main__":
