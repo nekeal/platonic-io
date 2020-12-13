@@ -78,7 +78,6 @@ class TestLicencePlateOCRReader:
         is_valid3,
     ):
         plate_text = f"{'A' * first_part_length}{separator}{'B' * second_part_length}"
-        print(plate_text, all([is_valid1, is_valid2, is_valid3]))
         lpor = LicencePlateOCRReader(np.ndarray([]))
         assert lpor.check_regex_match(plate_text) is all(
             [is_valid1, is_valid2, is_valid3]
