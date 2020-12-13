@@ -6,6 +6,7 @@ from time import sleep
 import cv2
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+from tqdm import tqdm
 
 from platonic_io import logger
 
@@ -82,6 +83,7 @@ class Master(Thread):
         self.log = ""
 
     def run(self):
+        logger.debug(f"Starting recognition of {self.input_path}")
         movie = cv2.VideoCapture(self.input_path)
         size = (
             int(movie.get(cv2.CAP_PROP_FRAME_WIDTH)),
@@ -111,6 +113,7 @@ class Master(Thread):
         no_more_frames = False
         frame_idx = 0
         last_saved_idx = -1
+        progress_bar = tqdm(desc="Progress")
         while True:
             # Read frames and distribute among workers
             ret, frame = movie.read()
@@ -120,6 +123,7 @@ class Master(Thread):
                     sleep(0.01)
                 tasks.put((frame_idx, frame))
                 frame_idx += 1
+                progress_bar.update(1)
             else:
                 no_more_frames = True
 
@@ -138,7 +142,7 @@ class Master(Thread):
                         break
                     sink.write(res[2])
                     plates_log.append([res[0], res[1]])
-                    logger.debug("==========WROTE {} frame".format(res[0]))
+                    logger.debug(f"Saved {res[0]} frame")
                     last_saved_idx = res[0]
                     self.progress = round(
                         (last_saved_idx / (frames_in_file - 1)) * 100, 1
