@@ -4,6 +4,8 @@ from typing import Union
 import cv2
 import numpy as np
 
+from platonic_io import logger
+
 from .local_utils import detect_lp
 
 
@@ -16,10 +18,10 @@ def load_model(path):
             model_json = json_file.read()
         model = model_from_json(model_json, custom_objects={})
         model.load_weights("%s.h5" % path)
-        print("Loading model successfully...")
+        logger.debug("Loading model successfully...")
         return model
-    except Exception as e:
-        print(e)
+    except Exception:
+        logger.exception("Unhandled exception occured duing model loading")
 
 
 def preprocess_image(image, resize=False):

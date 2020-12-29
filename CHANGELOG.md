@@ -2,6 +2,11 @@
 
 ## 0.3.0.dev (UNRELEASED)
 
+### Added
+- Added logger and logging across the code
+- Added docs about cli
+- Added tqdm progress bar
+
 ## 0.2.1 (2020-12-07)
 
 ### Changed

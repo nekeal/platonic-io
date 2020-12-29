@@ -6,6 +6,9 @@ from time import sleep
 import cv2
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+from tqdm import tqdm
+
+from platonic_io import logger
 
 from .get_plate import draw_box, get_plate, get_width_height_ratio, load_model
 from .local_utils import get_model_filepath
@@ -80,6 +83,7 @@ class Master(Thread):
         self.log = ""
 
     def run(self):
+        logger.debug(f"Starting recognition of {self.input_path}")
         movie = cv2.VideoCapture(self.input_path)
         size = (
             int(movie.get(cv2.CAP_PROP_FRAME_WIDTH)),
@@ -109,6 +113,7 @@ class Master(Thread):
         no_more_frames = False
         frame_idx = 0
         last_saved_idx = -1
+        progress_bar = tqdm(desc="Progress")
         while True:
             # Read frames and distribute among workers
             ret, frame = movie.read()
@@ -118,6 +123,7 @@ class Master(Thread):
                     sleep(0.01)
                 tasks.put((frame_idx, frame))
                 frame_idx += 1
+                progress_bar.update(1)
             else:
                 no_more_frames = True
 
@@ -136,7 +142,7 @@ class Master(Thread):
                         break
                     sink.write(res[2])
                     plates_log.append([res[0], res[1]])
-                    print("==========WROTE {} frame".format(res[0]))
+                    logger.debug(f"Saved {res[0]} frame")
                     last_saved_idx = res[0]
                     self.progress = round(
                         (last_saved_idx / (frames_in_file - 1)) * 100, 1
@@ -144,7 +150,7 @@ class Master(Thread):
 
             if no_more_frames and tasks.qsize() == 0 and results.qsize() == 0:
                 self.progress = 100
-                print("Reached end")
+                logger.debug("Reached end")
                 for entry in plates_log:
                     timestamp = entry[0] / fps
                     valid_plates = [p for p in entry[1] if 4 <= len(p) < 9]
@@ -153,7 +159,7 @@ class Master(Thread):
                 sink.release()
                 for w in workers:
                     tasks.put((None, None))
-                print(plates_log)
+                logger.debug(plates_log)
                 break
 
     def get_progress(self):
