@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## 0.3.0.dev (UNRELEASED)
+## 0.4.0.dev (UNRELEASED)
+
+## 0.3.0 (2020-12-29)
 
 ### Added
 - Added logger and logging across the code
