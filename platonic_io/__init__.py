@@ -1,6 +1,6 @@
 """Top-level package for platonic-io."""
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 import logging
 import sys
