@@ -5,7 +5,7 @@ import threading
 import time
 import tkinter as tk
 from pathlib import Path
-from tkinter import Toplevel, filedialog
+from tkinter import Toplevel, filedialog, messagebox
 from tkinter.ttk import Progressbar
 
 import imageio
@@ -24,7 +24,9 @@ class GUI:
         self.root = tk.Tk()
         self.progress = Progressbar(self.root, orient="horizontal")
         self.buttons_frame = tk.Frame(self.root, bg="grey")
-        self.labelframe = tk.LabelFrame(self.root, bg="grey", height=35, width=130)
+        self.labelframe = tk.LabelFrame(
+            self.root, bg="grey", height=35, width=130, padx=10
+        )
         self.label = tk.Label(self.labelframe)
         self.top = None
         self.topSettings = None
@@ -38,7 +40,7 @@ class GUI:
         self.thread = thread
 
     def run(self):
-        self.root.geometry("1400x1000")
+        self.root.geometry("1200x900")
         self.root.resizable(0, 0)
         self.root.title("Platonic")
         self.root.config(bg="grey")
@@ -53,19 +55,33 @@ class GUI:
         self.buttons_frame.config(width=25, height=40)
         self.buttons_frame.grid(row=0, column=2, sticky="NESW", pady=10)
 
-        upload_file_button = tk.Button(
+        currently_loaded_file_label = tk.Label(
             self.buttons_frame,
-            text="upload a video",
-            command=self.upload_video,
+            text="Loaded file",
             width=32,
+            bg="grey",
+            font="Verdana 10 bold",
         )
-        upload_file_button.grid(row=0, column=0, pady=10, padx=10)
+        currently_loaded_file_label.grid(row=8, column=0, pady=0, padx=0)
+
+        currently_loaded_file = tk.Label(
+            self.buttons_frame,
+            text="None",
+            wraplength=200,
+            width=40,
+            bg="grey",
+            font="Verdana 9 bold",
+        )
+        currently_loaded_file.grid(row=10, column=0, pady=10, padx=10)
 
         start_algorithm_button = tk.Button(
             self.buttons_frame,
             text="start algorithm",
-            command=self.start_algorithm,
+            command=lambda: self.start_algorithm(
+                currently_loaded_file, currently_loaded_file_label
+            ),
             width=32,
+            state="disabled",
         )
         start_algorithm_button.grid(row=2, column=0, pady=10, padx=10)
 
@@ -74,6 +90,7 @@ class GUI:
             text="outside player",
             command=self.play_uploaded_video,
             width=32,
+            state="disabled",
         )
         play_uploaded_video_button.grid(row=4, column=0, pady=10, padx=10)
 
@@ -82,8 +99,22 @@ class GUI:
             text="inbuild player",
             command=self.inside_player,
             width=32,
+            state="disabled",
         )
         inside_player.grid(row=6, column=0, pady=10, padx=10)
+
+        upload_file_button = tk.Button(
+            self.buttons_frame,
+            text="upload a video",
+            command=lambda: self.upload_video(
+                start_algorithm_button,
+                play_uploaded_video_button,
+                inside_player,
+                currently_loaded_file,
+            ),
+            width=32,
+        )
+        upload_file_button.grid(row=0, column=0, pady=10, padx=10)
 
         self.labelframe.grid(row=0, column=1, pady=10)
         self.label.config(bg="grey71", height=40, width=130)
@@ -106,18 +137,22 @@ class GUI:
             self.label.config(image=frame_image, width=920, height=600)
             self.label.image = frame_image  # type: ignore
 
-    def upload_video(self):
+    def upload_video(self, process, outside, inbuilt, loaded):
         self.uploaded_file = filedialog.askopenfilename()
         if self.uploaded_file.endswith((".mp4", ".mkv")):
             self.video = imageio.get_reader(self.uploaded_file)
+            process["state"] = "normal"
+            outside["state"] = "normal"
+            inbuilt["state"] = "normal"
+            loaded["text"] = self.uploaded_file
         else:
-            self.warning_window(
+            messagebox.showerror(
                 "Bad format", "Wrong data format chosen! Select mp4 or mkv file"
             )
             self.uploaded_file = ""
 
-    def start_algorithm(self):
-        self.progress.grid(row=1, column=1, sticky="EW", pady=10)
+    def start_algorithm(self, label, loaded):
+        self.progress.grid(row=1, column=1, sticky="EW", pady=10, padx=10)
         master = Master(
             self.uploaded_file,
             os.path.join(self.video_location, self.video_name),
@@ -127,15 +162,21 @@ class GUI:
         time.sleep(15)
         self.progress_percent = master.get_progress()
         self.refresh_progress(master)
-        Path(os.path.join(self.report, self.raport_name)).write_text(
+        Path(os.path.join(self.report, self.report_name)).write_text(
             str(master.get_log())
         )
+        self.progress["value"] = 100
+        self.uploaded_file = os.path.join(self.video_location, self.video_name)
+        self.video = imageio.get_reader(self.uploaded_file)
+        label["text"] = os.path.join(self.video_location, self.video_name)
+        loaded["text"] = "Processed file"
 
     def refresh_progress(self, master):
         while master.is_alive():
             self.progress["value"] = self.progress_percent
             self.root.update_idletasks()
             self.progress_percent = master.get_progress()
+            time.sleep(1)
 
     def play_uploaded_video(self):
         if self.uploaded_file != "" and sys.platform == "win32":
@@ -147,7 +188,7 @@ class GUI:
             opener = "xdg-open"
             subprocess.call([opener, self.uploaded_file])
         else:
-            self.warning_window(
+            messagebox.showerror(
                 "No video uploaded", "No video uploaded! Upload one to play it"
             )
 
@@ -156,45 +197,58 @@ class GUI:
         thread.daemon = 1  # type: ignore
         thread.start()
 
-    def warning_window(self, warning_title, warning_message):
-        self.top = Toplevel()
-        self.top.resizable(0, 0)
-        self.top.title(warning_title)
-        self.top.geometry("450x150")
-        self.top.config(bg="grey")
-        warning_label = tk.Label(
-            self.top, text=warning_message, bg="grey", pady=40, font="Verdana 10 bold"
+    def choose_raport_location(self, label):
+        self.report = filedialog.askdirectory(parent=self.top)
+        label["text"] = "processed report location: " + os.path.join(
+            self.report, self.report_name
         )
-        warning_label.pack(anchor="center")
-        exit_button = tk.Button(
-            self.top,
-            text="exit",
-            command=self.top.destroy,
-            width=400,
-            height=35,
-            bg="grey71",
+
+    def choose_video_location(self, label):
+        self.video_location = filedialog.askdirectory(parent=self.top)
+        label["text"] = "processed video location: " + os.path.join(
+            self.video_location, self.video_name
         )
-        exit_button.pack(padx=10, pady=7)
-
-    def choose_raport_location(self):
-        self.report = filedialog.askdirectory()
-
-    def choose_video_location(self):
-        self.video_location = filedialog.askdirectory()
 
     def exit_settings(self, top, video_location, report):
         if video_location.get() != "":
-            self.video_name = video_location.get()
+            self.video_name = video_location.get() + ".mp4"
         if report.get() != "":
-            self.raport_name = report.get()
+            self.report_name = report.get() + ".txt"
         self.topSettings.destroy()  # type: ignore
 
     def settings_window(self):
         self.topSettings = Toplevel()
         self.topSettings.resizable(0, 0)
         self.topSettings.title("settings")
-        self.topSettings.geometry("500x300")
+        self.topSettings.geometry("500x475")
         self.topSettings.config(bg="grey")
+
+        where_is_video = tk.Label(
+            self.topSettings,
+            text="processed video location: "
+            + os.path.join(self.video_location, self.video_name),  # type: ignore
+            width=90,
+            bg="grey",
+            wraplength=200,
+            pady=15,
+            font="Verdana 10 bold",
+        )
+
+        where_is_video.place(x=-100, y=340)
+
+        where_is_report = tk.Label(
+            self.topSettings,
+            text="processed report location: "
+            + os.path.join(self.report, self.report_name),  # type: ignore
+            width=90,
+            bg="grey",
+            wraplength=200,
+            pady=15,
+            font="Verdana 10 bold",
+        )
+
+        where_is_report.place(x=-100, y=260)
+
         report_label = tk.Label(
             self.topSettings,
             text="Where to store report:",
@@ -207,7 +261,7 @@ class GUI:
             self.topSettings,
             width=35,
             text="Choose directory",
-            command=self.choose_raport_location,
+            command=lambda: self.choose_raport_location(where_is_report),
         )
         report_button.grid(row=1, column=1, padx=10, pady=5)
         where_report_label = tk.Label(
@@ -219,6 +273,7 @@ class GUI:
         )
         where_report_label.grid(row=3, column=0)
         where_report_input = tk.Entry(self.topSettings, width=35)
+        where_report_input.insert(0, self.report_name[: len(self.report_name) - 4])
         where_report_input.grid(row=3, column=1, padx=10)
         video_label = tk.Label(
             self.topSettings,
@@ -232,7 +287,7 @@ class GUI:
             self.topSettings,
             width=35,
             text="Choose directory",
-            command=self.choose_video_location,
+            command=lambda: self.choose_video_location(where_is_video),
         )
         video_input.grid(row=2, column=1, padx=10, pady=5)
         where_video_label = tk.Label(
@@ -244,6 +299,7 @@ class GUI:
         )
         where_video_label.grid(row=4, column=0)
         where_video_input = tk.Entry(self.topSettings, width=35)
+        where_video_input.insert(0, self.video_name[: len(self.video_name) - 4])
         where_video_input.grid(row=4, column=1, padx=10)
         exit_button = tk.Button(
             self.topSettings,
@@ -255,7 +311,17 @@ class GUI:
             height=35,
             bg="grey71",
         )
-        exit_button.place(x=100, y=250, relwidth=0.6, relheight=0.1)
+        exit_button.place(x=15, y=420, relwidth=0.95, relheight=0.08)
+
+        how_many_threads = tk.Label(
+            self.topSettings,
+            text="active threads: " + str(self.thread),
+            width=20,
+            bg="grey",
+            pady=20,
+            font="Verdana 10 bold",
+        )
+        how_many_threads.place(x=180, y=220)
 
 
 if __name__ == "__main__":
