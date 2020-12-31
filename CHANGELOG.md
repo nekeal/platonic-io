@@ -6,7 +6,7 @@
 - Upgraded graphical interface
 - Added interface information about processed files destinations and active threads
 - Blocked players before the proper video is uploaded
-- Now popups blocks main window before being closed
+- Now popups block main window before being closed
 
 ## 0.3.0 (2020-12-29)
 

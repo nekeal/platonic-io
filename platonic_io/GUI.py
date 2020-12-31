@@ -38,6 +38,8 @@ class GUI:
         self.report_name = "processed_report.txt"
         self.progress_percent = 0
         self.thread = thread
+        self.video_path = Path(self.video_location).joinpath(self.video_name)
+        self.report_path = Path(self.report).joinpath(self.report_name)
 
     def run(self):
         self.root.geometry("1200x900")
@@ -128,6 +130,11 @@ class GUI:
 
         self.root.mainloop()
 
+    def refrest_paths(self):
+
+        self.video_path = Path(self.video_location).joinpath(self.video_name)
+        self.report_path = Path(self.report).joinpath(self.report_name)
+
     def play_it(self, label):
 
         for image in self.video.iter_data():  # type: ignore
@@ -162,13 +169,12 @@ class GUI:
         time.sleep(15)
         self.progress_percent = master.get_progress()
         self.refresh_progress(master)
-        Path(os.path.join(self.report, self.report_name)).write_text(
-            str(master.get_log())
-        )
+        self.report_path.write_text(str(master.get_log()))
         self.progress["value"] = 100
-        self.uploaded_file = os.path.join(self.video_location, self.video_name)
+        self.refrest_paths()
+        self.uploaded_file = str(self.video_path)
         self.video = imageio.get_reader(self.uploaded_file)
-        label["text"] = os.path.join(self.video_location, self.video_name)
+        label["text"] = str(self.video_path)
         loaded["text"] = "Processed file"
 
     def refresh_progress(self, master):
@@ -199,21 +205,20 @@ class GUI:
 
     def choose_raport_location(self, label):
         self.report = filedialog.askdirectory(parent=self.top)
-        label["text"] = "processed report location: " + os.path.join(
-            self.report, self.report_name
-        )
+        self.refrest_paths()
+        label["text"] = "processed report location: " + str(self.report_path)
 
     def choose_video_location(self, label):
         self.video_location = filedialog.askdirectory(parent=self.top)
-        label["text"] = "processed video location: " + os.path.join(
-            self.video_location, self.video_name
-        )
+        self.refrest_paths()
+        label["text"] = "processed video location: " + str(self.video_path)
 
     def exit_settings(self, top, video_location, report):
         if video_location.get() != "":
             self.video_name = video_location.get() + ".mp4"
         if report.get() != "":
             self.report_name = report.get() + ".txt"
+        self.refrest_paths()
         self.topSettings.destroy()  # type: ignore
 
     def settings_window(self):
@@ -225,8 +230,7 @@ class GUI:
 
         where_is_video = tk.Label(
             self.topSettings,
-            text="processed video location: "
-            + os.path.join(self.video_location, self.video_name),  # type: ignore
+            text="processed video location: " + str(self.video_path),
             width=90,
             bg="grey",
             wraplength=200,
@@ -239,7 +243,7 @@ class GUI:
         where_is_report = tk.Label(
             self.topSettings,
             text="processed report location: "
-            + os.path.join(self.report, self.report_name),  # type: ignore
+            + os.path.join(self.report, self.report_name),
             width=90,
             bg="grey",
             wraplength=200,
