@@ -162,7 +162,7 @@ class GUI:
         self.progress.grid(row=1, column=1, sticky="EW", pady=10, padx=10)
         master = Master(
             self.uploaded_file,
-            os.path.join(self.video_location, self.video_name),
+            str(self.video_path),
             self.thread,
         )
         master.start()
@@ -242,8 +242,7 @@ class GUI:
 
         where_is_report = tk.Label(
             self.topSettings,
-            text="processed report location: "
-            + os.path.join(self.report, self.report_name),
+            text="processed report location: " + str(self.report_path),
             width=90,
             bg="grey",
             wraplength=200,
