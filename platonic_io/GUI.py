@@ -130,7 +130,7 @@ class GUI:
 
         self.root.mainloop()
 
-    def refrest_paths(self):
+    def refresh_paths(self):
 
         self.video_path = Path(self.video_location).joinpath(self.video_name)
         self.report_path = Path(self.report).joinpath(self.report_name)
@@ -171,7 +171,7 @@ class GUI:
         self.refresh_progress(master)
         self.report_path.write_text(str(master.get_log()))
         self.progress["value"] = 100
-        self.refrest_paths()
+        self.refresh_paths()
         self.uploaded_file = str(self.video_path)
         self.video = imageio.get_reader(self.uploaded_file)
         label["text"] = str(self.video_path)
@@ -205,12 +205,12 @@ class GUI:
 
     def choose_raport_location(self, label):
         self.report = filedialog.askdirectory(parent=self.top)
-        self.refrest_paths()
+        self.refresh_paths()
         label["text"] = "processed report location: " + str(self.report_path)
 
     def choose_video_location(self, label):
         self.video_location = filedialog.askdirectory(parent=self.top)
-        self.refrest_paths()
+        self.refresh_paths()
         label["text"] = "processed video location: " + str(self.video_path)
 
     def exit_settings(self, top, video_location, report):
@@ -218,7 +218,7 @@ class GUI:
             self.video_name = video_location.get() + ".mp4"
         if report.get() != "":
             self.report_name = report.get() + ".txt"
-        self.refrest_paths()
+        self.refresh_paths()
         self.topSettings.destroy()  # type: ignore
 
     def settings_window(self):
