@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "platonic-io"
-version = "0.3.0"
+version = "0.4.0"
 readme = "README.md"
 repository = "https://github.com/nekeal/platonic-io/tree/minor_corrections"
 documentation = "https://platonic-io.readthedocs.io/en/stable/"
