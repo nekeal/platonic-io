@@ -1,4 +1,4 @@
-from multiprocessing import Queue
+from queue import Queue
 from pathlib import Path
 from threading import Thread
 from time import sleep
