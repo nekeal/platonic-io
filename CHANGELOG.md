@@ -2,6 +2,10 @@
 
 ## 0.5.0.dev (UNRELEASED)
 
+### Added
+- Minor GUI updates
+- Broken Pipe error erased
+
 ## 0.4.0 (2020-01-02)
 
 ### Added

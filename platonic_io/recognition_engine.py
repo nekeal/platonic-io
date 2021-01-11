@@ -1,5 +1,5 @@
-from multiprocessing import Queue
 from pathlib import Path
+from queue import Queue
 from threading import Thread
 from time import sleep
 

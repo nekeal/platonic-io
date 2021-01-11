@@ -80,7 +80,13 @@ class GUI:
             self.buttons_frame,
             text="start algorithm",
             command=lambda: self.start_algorithm(
-                currently_loaded_file, currently_loaded_file_label
+                currently_loaded_file,
+                currently_loaded_file_label,
+                upload_file_button,
+                start_algorithm_button,
+                play_uploaded_video_button,
+                inside_player,
+                menu_button,
             ),
             width=32,
             state="disabled",
@@ -158,7 +164,9 @@ class GUI:
             )
             self.uploaded_file = ""
 
-    def start_algorithm(self, label, loaded):
+    def start_algorithm(
+        self, label, loaded, upload, process, outside, inbuilt, settings
+    ):
         self.progress.grid(row=1, column=1, sticky="EW", pady=10, padx=10)
         master = Master(
             self.uploaded_file,
@@ -166,6 +174,11 @@ class GUI:
             self.thread,
         )
         master.start()
+        upload["state"] = "disabled"
+        process["state"] = "disabled"
+        outside["state"] = "disabled"
+        inbuilt["state"] = "disabled"
+        settings["state"] = "disabled"
         time.sleep(15)
         self.progress_percent = master.get_progress()
         self.refresh_progress(master)
@@ -174,6 +187,11 @@ class GUI:
         self.refresh_paths()
         self.uploaded_file = str(self.video_path)
         self.video = imageio.get_reader(self.uploaded_file)
+        upload["state"] = "normal"
+        process["state"] = "normal"
+        outside["state"] = "normal"
+        inbuilt["state"] = "normal"
+        settings["state"] = "normal"
         label["text"] = str(self.video_path)
         loaded["text"] = "Processed file"
 
@@ -225,7 +243,7 @@ class GUI:
         self.topSettings = Toplevel()
         self.topSettings.resizable(0, 0)
         self.topSettings.title("settings")
-        self.topSettings.geometry("500x475")
+        self.topSettings.geometry("500x510")
         self.topSettings.config(bg="grey")
 
         where_is_video = tk.Label(
@@ -238,7 +256,7 @@ class GUI:
             font="Verdana 10 bold",
         )
 
-        where_is_video.place(x=-100, y=340)
+        where_is_video.place(x=-100, y=355)
 
         where_is_report = tk.Label(
             self.topSettings,
@@ -314,7 +332,7 @@ class GUI:
             height=35,
             bg="grey71",
         )
-        exit_button.place(x=15, y=420, relwidth=0.95, relheight=0.08)
+        exit_button.place(x=15, y=455, relwidth=0.95, relheight=0.08)
 
         how_many_threads = tk.Label(
             self.topSettings,
